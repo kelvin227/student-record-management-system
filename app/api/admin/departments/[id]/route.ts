@@ -3,9 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
   request: NextRequest,
-  context: { params: { id: string } }) {
+  { params }: { params: Promise<{ id: string }> }
+
+) {
   try {
-    const { id } = await context.params;
+    const { id } = await params;
     const body = await request.json();
 
     const { name, code } = body;
@@ -75,10 +77,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await context.params;
+    const { id } = await params;
 
     // Check if department exists
     const existingDepartment = await prisma.department.findUnique({
