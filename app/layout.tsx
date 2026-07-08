@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,8 +27,24 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+            <head>
+      <link rel="manifest" href="/manifest.json" />
+      <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
+
+        <body>
+                <ThemeProvider
+            attribute="class" // This tells next-themes to apply the 'dark' class to the html tag
+            defaultTheme="system" // Default theme: system, dark, or light
+            enableSystem // Enable system theme detection
+            disableTransitionOnChange
+            >
+          {children}
+           </ThemeProvider>
+        </body>
+     
     </html>
   );
 }

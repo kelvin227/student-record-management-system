@@ -1,0 +1,286 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  LECTURER
+  STUDENT
+}
+
+enum RegistrationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id       String @id @default(cuid())
+  email    String @unique
+  password String
+
+  role UserRole
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  student  Student?
+  lecturer Lecturer?
+
+  enteredScores   Score[] @relation("ScoreEnteredBy")
+  publishedScores Score[] @relation("ScorePublishedBy")
+
+  auditLogs AuditLog[]
+}
+
+model Department {
+  id String @id @default(cuid())
+
+  name String
+  code String @unique
+
+  createdAt DateTime @default(now())
+
+  programs  Program[]
+  students  Student[]
+  lecturers Lecturer[]
+  courses   Course[]
+}
+
+model Program {
+  id String @id @default(cuid())
+
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+
+  name     String
+  duration Int
+
+  students Student[]
+}
+
+model Session {
+  id String @id @default(cuid())
+
+  name     String  @unique
+  isActive Boolean @default(false)
+
+  semesters     Semester[]
+  registrations CourseRegistration[]
+  score         Score[]
+  gpaRecords    GPARecord[]
+}
+
+model Semester {
+  id String @id @default(cuid())
+
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id])
+
+  isActive  Boolean @default(false)
+
+  name String
+
+  courses       Course[]
+  score         Score[]
+  registrations CourseRegistration[]
+  gpaRecords    GPARecord[]
+
+  @@unique([sessionId, name])
+}
+
+model Student {
+  id String @id @default(cuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  matricNo String @unique
+
+  firstName String
+  lastName  String
+
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+
+  programId String
+  program   Program @relation(fields: [programId], references: [id])
+
+  level Int
+  phone String?
+
+  registrations CourseRegistration[]
+  scores        Score[]
+  gpaRecords    GPARecord[]
+}
+
+model Lecturer {
+  id String @id @default(cuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  staffId String @unique
+
+  firstName String
+  lastName  String
+
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+
+  scores      Score[]
+  allocations CourseAllocation[]
+}
+
+model Course {
+  id String @id @default(cuid())
+
+  code  String @unique
+  title String
+
+  creditUnit Int
+
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+
+  level Int
+
+  semesterId String
+  semester   Semester @relation(fields: [semesterId], references: [id])
+
+  registrations CourseRegistration[]
+  scores        Score[]
+
+  allocations CourseAllocation[]
+}
+
+model CourseAllocation {
+  id String @id @default(cuid())
+
+  lecturerId String
+  lecturer   Lecturer @relation(fields: [lecturerId], references: [id])
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([lecturerId, courseId])
+}
+
+model CourseRegistration {
+  id String @id @default(cuid())
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id])
+
+  semesterId String
+  semester   Semester @relation(fields: [semesterId], references: [id])
+
+  status RegistrationStatus
+  scores Score[]
+
+  @@unique([studentId, courseId, sessionId, semesterId])
+}
+
+model Score {
+  id String @id @default(cuid())
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  lecturerId String
+  lecturer   Lecturer @relation(fields: [lecturerId], references: [id])
+
+  enteredById String
+  enteredBy   User   @relation("ScoreEnteredBy", fields: [enteredById], references: [id])
+
+  publishedById String?
+  publishedBy   User?   @relation("ScorePublishedBy", fields: [publishedById], references: [id])
+
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id])
+
+  semesterId String
+  semester   Semester @relation(fields: [semesterId], references: [id])
+
+  registrationId String?
+  registration   CourseRegistration? @relation(fields: [registrationId], references: [id])
+
+  status ResultStatus @default(DRAFT)
+
+  ca    Float
+  exam  Float
+  total Float
+
+  grade      String
+  gradePoint Float
+
+  publishedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, courseId, sessionId, semesterId])
+}
+
+model GPARecord {
+  id String @id @default(cuid())
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id])
+
+  semesterId String
+  semester   Semester @relation(fields: [semesterId], references: [id])
+
+  createdAt  DateTime @default(now())
+
+  gpa  Float
+  cgpa Float
+
+  @@unique([studentId, sessionId, semesterId])
+}
+
+model AuditLog {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  action   String
+  entity   String
+  entityId String
+
+  createdAt DateTime @default(now())
+}
+
+enum ResultStatus {
+  DRAFT
+  SUBMITTED
+  PUBLISHED
+}
