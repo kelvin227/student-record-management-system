@@ -11,7 +11,8 @@ function inferGrade(total: number) {
   return { grade: 'F', gradePoint: 0 };
 }
 
-export async function GET(_request: Request, { params }: { params: { courseId: string } }) {
+export async function GET(_request: Request,   { params }: { params: Promise<{ courseId: string }> }
+) {
   const { courseId } = await params;
 
   try {
@@ -34,7 +35,8 @@ export async function GET(_request: Request, { params }: { params: { courseId: s
 
 type ScorePayload = { registrationId?: string; studentId?: string; ca: number; exam: number };
 
-export async function POST(request: Request, { params }: { params: { courseId: string } }) {
+export async function POST(request: Request,   { params }: { params: Promise<{ courseId: string }> }
+) {
   const { courseId } = await params;
   const session = await auth();
 

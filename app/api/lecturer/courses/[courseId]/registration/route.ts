@@ -3,7 +3,8 @@ import { prisma } from "@/lib/db";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { courseId: string } },
+  { params }: { params: Promise<{ courseId: string }> }
+
 ) {
   const { courseId } = await params;
   const { searchParams } = new URL(request.url);
