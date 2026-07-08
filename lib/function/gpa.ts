@@ -520,7 +520,7 @@ for (const student of students) {
     if (!gpaResult?.success) {
       return {
         success: false,
-        message: gpaResult?.message as string,
+        message: gpaResult?.message,
       };
     }
 
@@ -548,11 +548,6 @@ for (const student of students) {
     //     totalSemesters
     //   ).toFixed(2)
     // );
-    console.log("skipped", failedStudents.length);
-    console.log("generated", successfulStudents.length);
-    console.log("failed student", failedStudents);
-    console.log("successful student", successfulStudents);
-
     return {
       success: true,
       message: "GPA record generated successfully",

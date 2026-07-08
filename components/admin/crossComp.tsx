@@ -11,5 +11,5 @@ export default function CrossComp() {
     return <StudentSelector onSelect={setSelectedStudentId} />;
   }
 
-  return <GPAManager student={selectedStudentId} />;
+  return <GPAManager />;
 }
