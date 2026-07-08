@@ -14,7 +14,7 @@ export default function LandingPage() {
           <span>EduGrade</span>
         </div>
         <div className="flex items-center gap-4">
-          <Link href="app-codfel.vercel.app/sigin" className="text-sm font-medium hover:text-primary transition-colors">Login</Link>
+          <Link href="https://app-codfel.vercel.app/sigin" className="text-sm font-medium hover:text-primary transition-colors">Login</Link>
           <Button variant="default" size="sm">Get Started</Button>
         </div>
       </nav>
