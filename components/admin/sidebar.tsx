@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import {
   Users,
@@ -10,6 +11,8 @@ import {
   FileText,
   GraduationCap,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const menuItems = [
   { icon: Users, label: "Student Management", href: "/admin/students" },
@@ -39,7 +42,18 @@ const menuItems = [
 ];
 
 export default function SideBar() {
-  return (
+  const pathname = usePathname();
+   const[show, setShow] = useState(false);
+ 
+   useEffect(() =>{
+     if(pathname.includes("/login")){
+       setShow(false);
+     }else{
+       setShow(true);
+     }
+     
+   }, [])
+   return show ? (
     <div className="min-h-screen">
       {/* Sidebar */}
       <aside className="sticky top-0 h-screen md:w-64 lg:w-64 xl:w-64 bg-background dark:bg-backgrond border-r border-zinc-200 dark:border-zinc-800 overflow-y-auto">
@@ -68,5 +82,8 @@ export default function SideBar() {
         </nav>
       </aside>
     </div>
-  );
+  ) : (
+    <>
+    </>
+  )
 }

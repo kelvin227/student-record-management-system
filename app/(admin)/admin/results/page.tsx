@@ -6,7 +6,7 @@ export default async function Page(){
     const session = await auth();
 
     if(!session){
-        redirect("/");
+        redirect("/login");
     }
     return <ResultComp userId={session?.user?.id as string}/>;
 }

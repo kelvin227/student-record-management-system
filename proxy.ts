@@ -6,18 +6,30 @@ export function proxy(request: NextRequest) {
 
   // Support domain
   if (host === "app-codfel.vercel.app") {
+    if (url.pathname.startsWith("/student")) {
+      url.pathname = url.pathname.replace("/student", "") || "/";
+    }
+
     url.pathname = `/student${url.pathname}`;
     return NextResponse.rewrite(url);
   }
 
   // Distributor domain
   if (host === "admin-codfel.vercel.app") {
+    if (url.pathname.startsWith("/admin")) {
+      url.pathname = url.pathname.replace("/admin", "") || "/";
+    }
+
     url.pathname = `/admin${url.pathname}`;
     return NextResponse.rewrite(url);
   }
 
   // Launchgate domain
-  if (host === "staff-codfel.vercelapp") {
+  if (host === "staff-codfel.vercel.app") {
+    if (url.pathname.startsWith("/lecturer")) {
+      url.pathname = url.pathname.replace("/lecturer", "") || "/";
+    }
+
     url.pathname = `/lecturer${url.pathname}`;
     return NextResponse.rewrite(url);
   }

@@ -47,7 +47,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SideBar />
-          <div className="w-full p-5">{children}</div>
+          <div className="w-full">{children}</div>
         </ThemeProvider>
         </div>
         <Toaster />

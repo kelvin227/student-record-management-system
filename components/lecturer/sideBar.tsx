@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import {
   LayoutDashboard,
@@ -11,6 +12,8 @@ import {
   UploadCloud,
   CheckCircle2,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const lecturerMenu = [
   {
@@ -44,8 +47,19 @@ const lecturerMenu = [
 ];
 
 export default function LecturerSideBar() {
-  return (
-    <aside className="sticky top-0 h-screen w-64 border-r border-zinc-200 overflow-y-auto">
+  const pathname = usePathname();
+  const[show, setShow] = useState(false);
+
+  useEffect(() =>{
+    if(pathname.includes("/signin")){
+      setShow(false);
+    }else{
+      setShow(true);
+    }
+    
+  }, [])
+  return show ? (
+    <aside className={"sticky top-0 h-screen w-64 border-r border-zinc-200 overflow-y-auto"}>
       <div className="p-6">
         <h1 className="text-xl font-bold text-emerald-100 light:text-emerald-900">Faculty Portal</h1>
         <p className="text-xs text-emerald-400 light:text-emerald-600 mt-1 font-medium tracking-wide uppercase">Lecturer System</p>
@@ -76,5 +90,7 @@ export default function LecturerSideBar() {
         ))}
       </nav>
     </aside>
-  );
+  ): (
+    <></>
+  )
 }

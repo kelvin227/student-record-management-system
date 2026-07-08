@@ -7,7 +7,7 @@ import { CourseAllocation } from "../admin/courseAllocationComp";
 import { useRouter } from "next/navigation";
 
 const LecturerDashboard: React.FC = () => {
-  const[loading, setLoading] = useState(false);
+  const[loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [lecturer, setLecturer] = useState<Lecturer | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -48,7 +48,9 @@ const LecturerDashboard: React.FC = () => {
     }
   };
 
-  return (
+  return loading ? (
+            <div className="text-center py-8">Loading Component...</div>
+          ) : (
     <div className="p-12">
       <div className="m-10">
         <p style={{ margin: 0, fontSize: 14, color: "#6b7280" }}>Good Morning,</p>

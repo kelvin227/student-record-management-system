@@ -30,7 +30,7 @@ export default async function RootLayout({
     <>
       <div className="flex w-full min-h-screen bg-background">
         <SideBar />
-        <div className="w-full p-5">
+        <div className="w-full">
           <CourseNavigation />
           {children}
           </div>
