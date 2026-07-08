@@ -1,7 +1,11 @@
 "use server";
 
 import { prisma } from "@/lib/db";
-
+type GPAResult = {
+  success: boolean;
+  score: number;
+  message: string;
+};
 export async function calculateGPA(
   studentId: string,
   sessionId: string,
@@ -466,7 +470,7 @@ const successfulStudents = [];
       where: { level, departmentId: department, },
     })
 
-    let gpaResult;
+    let gpaResult: GPAResult | null = null;
     let record;
 for (const student of students) {
   const validation = await validateStudentResults(
@@ -515,14 +519,6 @@ for (const student of students) {
   successfulStudents.push(student.id);
 }
 
-
-
-    if (!gpaResult?.success) {
-      return {
-        success: false,
-        message: gpaResult?.message,
-      };
-    }
 
     // // Get all existing GPA records except the current semester
     // const existingRecords = await prisma.gPARecord.findMany({
