@@ -38,15 +38,15 @@ export interface Course {
   title: string;
   creditUnit: number;
   level: number;
-  department: {
+  department?: {
     name: string;
     id: string;
   };
-  semester: {
+  semester?: {
     name: string;
     id: string;
   };
-  allocations: {
+  allocations?: {
     lecturer: Lecturer
   };
 }
@@ -127,8 +127,8 @@ export default function CourseManagementComp() {
         title: course.title,
         creditUnit: course.creditUnit.toString(),
         level: course.level.toString(),
-        departmentId: course.department.id,
-        semesterId: course.semester.id,
+        departmentId: course.department?.id as string,
+        semesterId: course.semester?.id as string,
       });
     } else {
       setEditingCourse(null);
@@ -394,8 +394,8 @@ export default function CourseManagementComp() {
                         <TableCell>{course.title}</TableCell>
                         <TableCell>{course.creditUnit}</TableCell>
                         <TableCell>{course.level}</TableCell>
-                        <TableCell>{course.department.name}</TableCell>
-                        <TableCell>{course.semester.name}</TableCell>
+                        <TableCell>{course.department?.name}</TableCell>
+                        <TableCell>{course.semester?.name}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
                             <Button

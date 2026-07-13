@@ -78,7 +78,7 @@ interface Result {
   totalScore: number;
   grade: string;
   gradePoint: number;
-  status: "DRAFT" | "PUBLISHED";
+  status: "SUBMITTED"| "DRAFT" | "PUBLISHED";
   student?: Student;
   lecturer?: Lecturer;
 }
@@ -113,10 +113,13 @@ const calculateGrade = (score: number) => {
 
 const getBadgeVariant = (status: Result["status"]) => {
   if (status === "PUBLISHED") {
-    return "default" as const;
+    return "outline" as const;
   }
   if (status === "DRAFT") {
     return "secondary" as const;
+  }
+  if (status === "SUBMITTED") {
+    return "default" as const;
   }
   return "default" as const;
 };
@@ -410,7 +413,6 @@ export default function ResultComp({ userId }: { userId: string }) {
 
   const handlePreview = (result: Result) => {
     setPreviewResult(result);
-    console.log("preview");
     setIsPreviewOpen(true);
   };
 
@@ -431,7 +433,7 @@ export default function ResultComp({ userId }: { userId: string }) {
     const student = students.find(
       (s) => s.id === formState.studentId,
     )?.departmentId;
-    const dialogCourseFilter = course.department.id.includes(student as string);
+    const dialogCourseFilter = course?.department?.id.includes(student as string);
 
     return dialogCourseFilter;
   });

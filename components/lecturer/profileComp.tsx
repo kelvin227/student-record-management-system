@@ -110,7 +110,7 @@ const LecturerProfile = ({ onPasswordChange }: LecturerProfileProps) => {
           Back
         </Button>
       </div>
-      <PasswordChangeUI />
+      <PasswordChangeUI url="/api/lecturer/resetPassword"/>
     </div>
   ) : (
     <div className="p-8 max-w-4xl mx-auto space-y-8">
@@ -209,7 +209,7 @@ const LecturerProfile = ({ onPasswordChange }: LecturerProfileProps) => {
   );
 };
 
-export function PasswordChangeUI() {
+export function PasswordChangeUI({url}: {url: string}) {
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState({
     oldPass: "",
@@ -218,6 +218,7 @@ export function PasswordChangeUI() {
   });
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     if (!password.oldPass || !password.newPass || !password.confirmPass) {
       toast.error("Please complete all password fields.");
       return;
@@ -228,7 +229,7 @@ export function PasswordChangeUI() {
       return;
     }
 
-    const response = await fetch("/api/lecturer/resetPassword", {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -245,6 +246,7 @@ export function PasswordChangeUI() {
       newPass: "",
       confirmPass: "",
     });
+    setLoading(false);
     toast.success("Password update request sent.");
   };
   return (
