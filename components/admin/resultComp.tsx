@@ -78,7 +78,7 @@ interface Result {
   totalScore: number;
   grade: string;
   gradePoint: number;
-  status: "SUBMITTED"| "DRAFT" | "PUBLISHED";
+  status: "SUBMITTED" | "DRAFT" | "PUBLISHED";
   student?: Student;
   lecturer?: Lecturer;
 }
@@ -340,6 +340,9 @@ export default function ResultComp({ userId }: { userId: string }) {
   ).length;
   const pendingResults = results.filter(
     (result) => result.status === "DRAFT",
+  ).length;
+   const submittedResults = results.filter(
+    (result) => result.status === "SUBMITTED",
   ).length;
   const coursesWithResults = new Set(results.map((result) => result.courseId))
     .size;
@@ -768,7 +771,7 @@ export default function ResultComp({ userId }: { userId: string }) {
                               >
                                 <Trash2 size={16} className="mr-2" /> Delete
                               </DropdownMenuItem>
-                              {result.status === "DRAFT" ? (
+                              {result.status === "SUBMITTED" ? (
                                 <DropdownMenuItem
                                   onSelect={() =>
                                     handlePublishResult(result.id)
