@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { auth } from "@/auth";
 import { verifyAccessToken } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
