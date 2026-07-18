@@ -6,11 +6,11 @@ export function proxy(request: NextRequest) {
 
   // Support domain
   if (host === "app-codfel.vercel.app") {
-    if (url.pathname.startsWith("/student")) {
-      url.pathname = url.pathname.replace("/student", "") || "/";
+    if (url.pathname.startsWith("/students")) {
+      url.pathname = url.pathname.replace("/students", "") || "/";
     }
 
-    url.pathname = `/student${url.pathname}`;
+    url.pathname = `/students${url.pathname}`;
     return NextResponse.rewrite(url);
   }
 
