@@ -6,7 +6,7 @@ export default async function Home() {
   const session = await auth();
 
   if (!session || session?.user.role !== "STUDENT") {
-    redirect("/students/signin");
+    redirect("/students/login");
   }
   return <StudentDashboard />
 }

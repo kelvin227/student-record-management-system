@@ -21,7 +21,7 @@ export function comparePasswords(password: string, hash: string) {
 }
 
 export function generateAccessToken(id: string) {
-  return jwt.sign({ id }, JWT_SECRET, { expiresIn: "15m" });
+  return jwt.sign({ id }, JWT_SECRET, { expiresIn: "30m" });
 }
 
 export function generateRefreshToken(id: string) {
@@ -29,7 +29,16 @@ export function generateRefreshToken(id: string) {
 }
 
 export function verifyAccessToken(token: string) {
-  return jwt.verify(token, JWT_SECRET);
+try {
+    return jwt.verify(token, JWT_SECRET);
+  } catch (err: any) {
+    if (err.name === 'TokenExpiredError') {
+      // Handle specifically for expired tokens (e.g., trigger refresh flow)
+      return { expired: true };
+    }
+    // Handle invalid signature or malformed tokens
+    return { invalid: true };
+  }
 }
 
 export function verifyRefreshToken(token: string) {

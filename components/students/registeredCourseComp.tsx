@@ -6,15 +6,6 @@ import { BookOpen, CheckCircle2, Clock, XCircle } from "lucide-react";
 import { RegistrationStatus } from "@prisma/client";
 import { CourseRegistration } from "../admin/courseRegistrationComp";
 
-type RegisteredCourse = {
-  id: string;
-  course: {
-    code: string;
-    title: string;
-    creditUnit: number;
-  };
-  status: RegistrationStatus;
-};
 
 export default function RegisteredCoursesView({ registrations }: { registrations: CourseRegistration[] }) {
   
